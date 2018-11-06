@@ -9,6 +9,6 @@ public class Constants {
 
     public static class GameParameters {
         public static final int GAME_AREA_WIDTH = 10;
-        public static final int GAME_AREA_HEIGHT = 19;
+        public static final int GAME_AREA_HEIGHT = 21;
     }
 }
