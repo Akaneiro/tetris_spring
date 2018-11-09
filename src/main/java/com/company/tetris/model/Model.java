@@ -1,11 +1,19 @@
 package com.company.tetris.model;
 
 import java.awt.event.KeyEvent;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.company.tetris.Constants;
 import com.company.tetris.GameState;
 
+@Component
 public class Model {
 
+	@Autowired
 	private ShapeFactory mShapeFactory;
 
 	private int[][] mGameArea;
@@ -37,9 +45,12 @@ public class Model {
 	public Model() {
 		mGameArea = new int[Constants.GameParameters.GAME_AREA_WIDTH][Constants.GameParameters.GAME_AREA_HEIGHT];
 		mScoreValue = 0;
-		mShapeFactory = new ShapeFactory();
+	}
+	
+	@PostConstruct
+	private void init() {
 		mCurrentFigure = createShape();
-		mNextFigure = createShape();
+		mNextFigure = createShape();		
 	}
 
 	public void setFinishEvent(OnFinishEvent event) {
@@ -175,8 +186,7 @@ public class Model {
 	}
 
 	private Shape createShape() {
-		Shape shape = new Shape();
-		shape.picture = mShapeFactory.createRandomShape().picture;
+		Shape shape = mShapeFactory.createRandomShape();
 		return shape;
 	}
 

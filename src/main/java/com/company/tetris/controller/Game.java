@@ -5,26 +5,32 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import com.company.tetris.Actions;
 import com.company.tetris.GameState;
+import com.company.tetris.TetrisConfig;
 import com.company.tetris.model.Model;
 import com.company.tetris.view.MainWindow;
 
-@Configuration
-@ComponentScan("com.company.tetris.controller")
+@Component
 public class Game implements Model.OnFinishEvent {
 
+	@Autowired
 	private Model mGameModel;
+	@Autowired
 	private MainWindow mWindow;
 
-	@Bean
 	public KeyListener keyListener() {
 		return new KeyListener() {
 			public void keyPressed(KeyEvent e) {
@@ -39,15 +45,10 @@ public class Game implements Model.OnFinishEvent {
 			}
 		};
 	}
-
-	public Game() {
-		ApplicationContext context = new ClassPathXmlApplicationContext("ApplicationContext.xml");
-		mGameModel = (Model) context.getBean("model");
-		mWindow = (MainWindow) context.getBean("view");
+	
+	@PostConstruct
+	private void init() {
 		mGameModel.setFinishEvent(this);
-
-//		ApplicationContext viewContext = new AnnotationConfigApplicationContext(Game.class);
-//		mWindow = viewContext.getBean(MainWindow.class);
 		ActionListener windowButtonsListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (e.getActionCommand().equals(Actions.NEW_GAME.name())) {
@@ -57,7 +58,6 @@ public class Game implements Model.OnFinishEvent {
 				}
 			}
 		};
-
 		mWindow.init(keyListener(), windowButtonsListener);
 	}
 

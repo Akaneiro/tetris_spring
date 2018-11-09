@@ -1,6 +1,9 @@
 package com.company.tetris.view;
 import javax.swing.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.company.tetris.Actions;
 import com.company.tetris.Constants;
 import com.company.tetris.model.Shape;
@@ -12,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
+@Component
 public class MainWindow extends JComponent {
     private JFrame mWindow;
     private JLabel mScoreLabel;
@@ -20,7 +24,10 @@ public class MainWindow extends JComponent {
     private int mScoreValue;
     private Shape mCurrentFigure, mNextFigure;
 
-    public void init(KeyListener keysListener, ActionListener windowButtonsListener) {
+//    @Autowired
+    private KeyListener mKeyListener;
+        
+    public void init(KeyListener keyListener, ActionListener windowButtonsListener) {
         mWindow = new JFrame();
         mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mWindow.setBounds(30, 30, 400, 490);
@@ -38,8 +45,7 @@ public class MainWindow extends JComponent {
         lbl.setBounds(225, 30, 100, 100);
         lbl.setFont(mScoreLabel.getFont().deriveFont(18.0f));
         mWindow.add(lbl);
-        mWindow.addKeyListener(keysListener);
-
+        mWindow.addKeyListener(keyListener);
         initMenu(windowButtonsListener);
     }
 
